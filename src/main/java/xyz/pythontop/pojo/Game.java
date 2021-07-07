@@ -4,10 +4,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Game {
+
+    @JsonProperty(value = "id")
+    private String id;
 
     @JsonProperty(value = "title")
     private String title;
@@ -15,8 +17,16 @@ public class Game {
     @JsonProperty(value = "effectiveDate")
     private LocalDateTime effectiveDate;
 
-    @JsonProperty(value = "urlSlug")
-    private String urlSlug;
+    @JsonProperty(value = "productSlug")
+    private String productSlug;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;
@@ -34,33 +44,21 @@ public class Game {
         this.effectiveDate = effectiveDate;
     }
 
-    public String getUrlSlug() {
-        return urlSlug;
+    public String getProductSlug() {
+        return productSlug;
     }
 
-    public void setUrlSlug(String urlSlug) {
-        this.urlSlug = urlSlug;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Game game = (Game) o;
-        return title.equals(game.title) && effectiveDate.equals(game.effectiveDate) && urlSlug.equals(game.urlSlug);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(title, effectiveDate, urlSlug);
+    public void setProductSlug(String productSlug) {
+        this.productSlug = productSlug;
     }
 
     @Override
     public String toString() {
         return "Game{" +
-                "title='" + title + '\'' +
+                "id='" + id + '\'' +
+                ", title='" + title + '\'' +
                 ", effectiveDate=" + effectiveDate +
-                ", urlSlug='" + urlSlug + '\'' +
+                ", productSlug='" + productSlug + '\'' +
                 '}';
     }
 }
