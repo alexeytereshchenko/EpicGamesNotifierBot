@@ -41,13 +41,13 @@ public class FGNBot extends AbilityBot {
 
     private void sendNotifyWithoutDuplicates(Long chatId) {
         List<Game> games = epicService.findGames();
-        LOG.info("Filter games: {}", games);
+        LOG.info("Games: {}", games);
         if (games == null) return;
         games
                 .stream()
                 .filter(game -> !sentGamesId.contains(game.getId() + "_" + chatId))
                 .forEach(game -> {
-                    silent.send(epicService.createUrl(game), chatId);
+                    silent.send(game.getUrl(), chatId);
                     sentGamesId.add(game.getId() + "_" + chatId);
                 });
     }
@@ -56,7 +56,7 @@ public class FGNBot extends AbilityBot {
         List<Game> games = epicService.findGames();
         if (games == null) return;
         games.forEach(game -> {
-            silent.send(epicService.createUrl(game), chatId);
+            silent.send(game.getUrl(), chatId);
         });
     }
 

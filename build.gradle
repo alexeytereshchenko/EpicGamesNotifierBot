@@ -11,6 +11,8 @@ repositories {
 }
 
 dependencies {
+    compileOnly 'org.projectlombok:lombok:1.18.20'
+    annotationProcessor 'org.projectlombok:lombok:1.18.20'
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
     implementation group: 'com.coreoz', name: 'wisp', version: '2.2.1'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.12.3'
