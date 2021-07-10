@@ -34,12 +34,12 @@ public class FGNBot extends AbilityBot {
     private void startScheduler() {
         Scheduler scheduler = new Scheduler();
         scheduler.schedule(
-                () -> subscribers.forEach(this::sendNotifyWithoutDuplicates),
+                () -> subscribers.forEach(this::sendNotify),
                 Schedules.fixedDelaySchedule(Duration.ofHours(5))
         );
     }
 
-    private void sendNotifyWithoutDuplicates(Long chatId) {
+    private void sendNotify(Long chatId) {
         List<Game> games = epicService.findGames();
         LOG.info("Games: {}", games);
         if (games == null) return;
@@ -52,12 +52,16 @@ public class FGNBot extends AbilityBot {
                 });
     }
 
-    private void sendNotify(Long chatId) {
+    private void sendGames(Long chatId) {
         List<Game> games = epicService.findGames();
         if (games == null) return;
-        games.forEach(game -> {
-            silent.send(game.getUrl(), chatId);
-        });
+        games.forEach(game -> silent.send(game.getUrl(), chatId));
+    }
+
+    private void sendComingSoonGames(Long chatId) {
+        List<Game> games = epicService.findComingSoonGames();
+        if (games == null) return;
+        games.forEach(game -> silent.send(game.getUrl(), chatId));
     }
 
     @Override
@@ -72,7 +76,18 @@ public class FGNBot extends AbilityBot {
                 .info("get free games")
                 .locality(Locality.ALL)
                 .privacy(Privacy.PUBLIC)
-                .action(ctx -> sendNotify(ctx.chatId()))
+                .action(ctx -> sendGames(ctx.chatId()))
+                .build();
+    }
+
+    public Ability findComingSoonGames() {
+        return Ability
+                .builder()
+                .name("coming_soon")
+                .info("get coming soon games")
+                .locality(Locality.ALL)
+                .privacy(Privacy.PUBLIC)
+                .action(ctx -> sendComingSoonGames(ctx.chatId()))
                 .build();
     }
 

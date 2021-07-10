@@ -22,6 +22,9 @@ public class Game {
     @JsonProperty(value = "endDate")
     private LocalDateTime endDate;
 
+    @JsonProperty(value = "status")
+    private String status;
+
     @JsonProperty(value = "url")
     private String url;
 }

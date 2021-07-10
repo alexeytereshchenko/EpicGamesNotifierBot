@@ -14,7 +14,8 @@ import java.util.List;
 public class EpicService {
 
     private final ObjectMapper mapper;
-    private static final String GAMES_URL = "http://pythontop.xyz/api/epic/games";
+    private static final String GAMES_URL_ACTIVE = "http://pythontop.xyz/api/epic/games/active";
+    private static final String GAMES_URL_COMINGSOON = "http://pythontop.xyz/api/epic/games/coming-soon";
     public static final Logger LOG = LoggerFactory.getLogger(EpicService.class.getName());
 
     public EpicService() {
@@ -22,10 +23,22 @@ public class EpicService {
         mapper.registerModule(new JavaTimeModule());
     }
 
+    public List<Game> findComingSoonGames() {
+        try {
+            return mapper.readValue(
+                    new URL(GAMES_URL_COMINGSOON),
+                    new TypeReference<List<Game>>() {}
+            );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public List<Game> findGames() {
         try {
             return mapper.readValue(
-                    new URL(GAMES_URL),
+                    new URL(GAMES_URL_ACTIVE),
                     new TypeReference<List<Game>>() {}
             );
         } catch (IOException e) {
