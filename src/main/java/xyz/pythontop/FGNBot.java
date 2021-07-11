@@ -8,6 +8,8 @@ import org.telegram.abilitybots.api.bot.AbilityBot;
 import org.telegram.abilitybots.api.objects.Ability;
 import org.telegram.abilitybots.api.objects.Locality;
 import org.telegram.abilitybots.api.objects.Privacy;
+import org.telegram.telegrambots.meta.api.methods.pinnedmessages.PinChatMessage;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import xyz.pythontop.pojo.Game;
 
 import java.time.Duration;
@@ -46,16 +48,27 @@ public class FGNBot extends AbilityBot {
         games
                 .stream()
                 .filter(game -> !sentGamesId.contains(game.getId() + "_" + chatId))
-                .forEach(game -> {
-                    silent.send(game.getUrl(), chatId);
+                .forEach(game -> silent.send(game.getUrl(), chatId).ifPresent(msg -> {
                     sentGamesId.add(game.getId() + "_" + chatId);
-                });
+                    pinMessage(msg);
+                }));
     }
 
     private void sendGames(Long chatId) {
         List<Game> games = epicService.findGames();
         if (games == null) return;
         games.forEach(game -> silent.send(game.getUrl(), chatId));
+    }
+
+    private void pinMessage(Message msg) {
+        sendApiMethodAsync(PinChatMessage.builder()
+                    .chatId(msg.getChatId().toString())
+                    .messageId(msg.getMessageId())
+                    .build())
+                .exceptionally(e -> {
+                    silent.send("Bot can't pin message, check permissions", msg.getChatId());
+                    return null;
+                });
     }
 
     private void sendComingSoonGames(Long chatId) {
