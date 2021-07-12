@@ -1,4 +1,4 @@
-package xyz.pythontop;
+package xyz.pythontop.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
