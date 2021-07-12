@@ -1,5 +1,5 @@
 <configuration scan="true">
-    <variable name="LOG_FILE" value="FGN-bot.log"/>
+    <variable name="LOG_FILE" value="EpicGamesNotifierBot.log"/>
     <variable name="LOG_FOLDER" value="logs"/>
 
     <appender name="ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -10,13 +10,13 @@
             <totalSizeCap>1GB</totalSizeCap>
         </rollingPolicy>
         <encoder>
-            <pattern>%-30(%d{HH:mm:ss.SSS} [%thread]) %-5level %logger{36} %ex{short} - %msg%n</pattern>
+            <pattern>%-30(%d{HH:mm:ss.SSS} [%thread]) %-5level %logger{36} - %msg%n %ex{11}</pattern>
         </encoder>
     </appender>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} %ex{short} - %msg%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %highlight(%-5level) %logger{36} - %highlight(%msg%n) %ex{11}</pattern>
         </encoder>
     </appender>
 

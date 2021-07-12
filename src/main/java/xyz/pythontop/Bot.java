@@ -21,12 +21,12 @@ import java.util.Map;
 import java.util.Set;
 
 
-public class FGNBot extends AbilityBot {
+public class Bot extends AbilityBot {
 
     private static final String BOT_TOKEN = System.getenv("GNF_BOT_TOKEN");
     private static final String BOT_USERNAME = System.getenv("FGN_BOT_USERNAME");
     private static final String CREATOR_ID = System.getenv("MY_TELEGRAM_ID");
-    public static final Logger LOG = LoggerFactory.getLogger(FGNBot.class.getName());
+    public static final Logger LOG = LoggerFactory.getLogger(Bot.class.getName());
 
     private final EpicService epicService = new EpicService();
     private final Set<Long> subscribers = db.getSet("subscribers");
@@ -34,7 +34,7 @@ public class FGNBot extends AbilityBot {
     private final Map<Long, List<Integer>> pinnedMessages = db.getMap("pinnedMsg");
     private final Scheduler scheduler = new Scheduler();
 
-    public FGNBot() {
+    public Bot() {
         super(BOT_TOKEN, BOT_USERNAME);
         startScheduler();
     }
@@ -85,7 +85,8 @@ public class FGNBot extends AbilityBot {
                     messages.add(message.getMessageId());
                     pinnedMessages.put(message.getChatId(), messages);
                 })
-                .exceptionally(throwable -> {
+                .exceptionally(e -> {
+                    LOG.error("Pin message", e);
                     silent.send(Alerts.PIN_WARNING.getText(), message.getChatId());
                     return null;
                 });
@@ -96,7 +97,8 @@ public class FGNBot extends AbilityBot {
                     .chatId(chatId.toString())
                     .messageId(messageId)
                     .build())
-                .exceptionally(throwable -> {
+                .exceptionally(e -> {
+                    LOG.error("Unpin message", e);
                     silent.send(Alerts.UNPIN_WARNING.getText(), chatId);
                     return null;
                 });

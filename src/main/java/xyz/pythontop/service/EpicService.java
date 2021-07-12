@@ -14,8 +14,8 @@ import java.util.List;
 public class EpicService {
 
     private final ObjectMapper mapper;
-    private static final String GAMES_URL_ACTIVE = "http://pythontop.xyz/api/epic/games/active";
-    private static final String GAMES_URL_COMINGSOON = "http://pythontop.xyz/api/epic/games/coming-soon";
+    private static final String GAMES_URL_ACTIVE = "https://pythontop.xyz/api/epic/games/active";
+    private static final String GAMES_URL_COMINGSOON = "https://pythontop.xyz/api/epic/games/coming-soon";
     public static final Logger LOG = LoggerFactory.getLogger(EpicService.class.getName());
 
     public EpicService() {
@@ -30,7 +30,7 @@ public class EpicService {
                     new TypeReference<List<Game>>() {}
             );
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Parse resource " + GAMES_URL_COMINGSOON, e);
         }
         return null;
     }
@@ -42,7 +42,7 @@ public class EpicService {
                     new TypeReference<List<Game>>() {}
             );
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Parse resource " + GAMES_URL_ACTIVE, e);
         }
         return null;
     }
